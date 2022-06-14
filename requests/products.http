@@ -1,0 +1,49 @@
+@api = http://localhost:3001/api/cartera
+
+{{api}}
+
+### add a product
+POST http://localhost:3001/api/cartera
+Content-Type: application/json
+
+{
+     "IdSede": 1,
+      "IdTurno" : 12,
+      "CodigoIsla": 1,
+      "Vendedor": "Juan",
+      "IdentificacionCliente": 123456789,
+      "NombreCliente" : "Edward",
+      "IdDocumento":5489889,
+      "Articulo" : "Disel",
+      "VolumenVenta" : 9746,
+      "ValorUnitario": 500,
+      "ValorVenta" : 159997,
+      "Placa" : "ABC123",
+      "FormasPago" : "Efectivo",
+      "CodigoCara": 87,
+      "CodigoManguera" : 636,
+      "PrefijoFactura": "FACT",
+      "NumeroFactura" : 1156,
+      "FechaZeta": "07/06/2022",
+      "Fecha": "07/06/2022" ,
+      "Hora": "00:00:00", 
+}
+
+### get product
+{{api}}/10
+
+### delete product 
+DELETE {{api}}/10
+
+### get count
+{{api}}/count
+
+### update
+PUT {{api}}/11
+Content-Type: application/json
+
+{
+    "name": "laptop",
+    "description": "some laptop",
+    "quantity": 20
+}
