@@ -6,6 +6,7 @@ import {
   getProductById,
   deleteProductById,
   getLogin,
+  getSum,
   getTotalProducts,
   updateProductById,
   createNewRelacional,
@@ -14,6 +15,7 @@ import {
 const router = Router();
 
 router.get("/cartera", getProducts);
+router.get("/sum", getSum);
 router.get("/relacional", getRelacional);
 
 router.get("login",getLogin)
@@ -25,7 +27,7 @@ router.get("/products/count", getTotalProducts);
 
 router.get("/products/:id", getProductById);
 
-router.delete("/products/:id", deleteProductById);
+router.delete("/cartera/:id", deleteProductById);
 
 router.put("/products/:id", updateProductById);
 

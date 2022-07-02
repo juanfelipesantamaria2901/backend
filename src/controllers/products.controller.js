@@ -22,6 +22,17 @@ export const getRelacional = async (req, res) => {
   }
 };
 
+export const getSum = async (req, res) => {
+  try {
+    const pool = await getConnection();
+    const result = await pool.request().query(querys.Sum);
+    res.json(result.recordset);
+  } catch (error) {
+    res.status(500);
+    res.send(error.message);
+  }
+};
+
 export const getLogin = async (req, res) => {
   try {
     const pool = await getConnection();
@@ -58,10 +69,13 @@ export const createNewProduct = async (req, res) => {
     NumeroFactura,
     FechaZeta,
     Fecha,
-    Hora, } = req.body;
+    Hora,
+    Rom,
+    Kilometraje,
+    Cuenta } = req.body;
 
   // validating
-  if (IdSede == null || IdTurno == null || CodigoIsla == null || Vendedor == null || IdentificacionCliente == null || NombreCliente == null || IdDocumento == null || Articulo == null || VolumenVenta == null || ValorUnitario == null || ValorVenta == null || Placa == null || FormasPago == null || CodigoCara == null || CodigoManguera == null || PrefijoFactura == null || NumeroFactura == null || FechaZeta == null || Fecha == null || Hora == null ) {
+  if (IdSede == null || IdTurno == null || CodigoIsla == null || Vendedor == null || IdentificacionCliente == null || NombreCliente == null || IdDocumento == null || Articulo == null || VolumenVenta == null || ValorUnitario == null || ValorVenta == null || Placa == null || FormasPago == null || CodigoCara == null || CodigoManguera == null || PrefijoFactura == null || NumeroFactura == null || FechaZeta == null || Fecha == null || Rom == null || Kilometraje == null || Cuenta == null) {
     return res.status(400).json({ msg: "Bad Request. Please fill all fields" });
   }
 
@@ -89,10 +103,14 @@ export const createNewProduct = async (req, res) => {
       .input("NumeroFactura", sql.Int, NumeroFactura)
       .input("FechaZeta", sql.Date, FechaZeta)
       .input("Fecha", sql.Date, Fecha)
-      .input("Hora", sql.DateTime, Hora)
+      .input('Hora', sql.VarChar, Hora)
+      .input("Rom", sql.VarChar, Rom)
+      .input("Kilometraje", sql.VarChar, Kilometraje)
+      .input("Cuenta", sql.VarChar, Cuenta)
       .query(querys.addNewProduct);
 
-    res.json({ IdSede,
+    res.json({
+      IdSede,
       IdTurno,
       CodigoIsla,
       Vendedor,
@@ -111,7 +129,11 @@ export const createNewProduct = async (req, res) => {
       NumeroFactura,
       FechaZeta,
       Fecha,
-      Hora, });
+      Hora,
+      Rom,
+      Kilometraje,
+      Cuenta
+    });
   } catch (error) {
     res.status(500);
     res.send(error.message);
@@ -119,13 +141,13 @@ export const createNewProduct = async (req, res) => {
 };
 
 export const createNewRelacional = async (req, res) => {
-  const {IdentificacionMaster,
+  const { IdentificacionMaster,
     TerceroMaster,
     Identificacion,
     Nombre, } = req.body;
 
   // validating
-  if (IdentificacionMaster == null || TerceroMaster == null || Identificacion== null || Nombre == null ) {
+  if (IdentificacionMaster == null || TerceroMaster == null || Identificacion == null || Nombre == null) {
     return res.status(400).json({ msg: "Bad Request. Please fill all fields" });
   }
 
@@ -140,10 +162,12 @@ export const createNewRelacional = async (req, res) => {
       .input("Nombre", sql.VarChar, Nombre)
       .query(querys.addNewRelacional);
 
-    res.json({ IdentificacionMaster,
+    res.json({
+      IdentificacionMaster,
       TerceroMaster,
       Identificacion,
-      Nombre, });
+      Nombre,
+    });
   } catch (error) {
     res.status(500);
     res.send(error.message);

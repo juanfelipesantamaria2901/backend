@@ -68,3 +68,38 @@ create table relacional(
    Primary Key (IdentificacionMaster)
 );
 
+
+SELECT [IdSede]
+      ,[IdFacturaCliente]
+	  ,[NombreVendedor]
+      ,[IdDocumento]
+      ,[IdTurno]
+      ,[CodigoIsla]
+      ,[CodigoCara]
+      ,[CodigoManguera]
+      ,[IdVentaEstacion]
+      ,[CodigoVenta]
+      ,[SecuenciaVenta]
+      ,[IdTranControladora]
+      ,[PrefijoFactura]
+      ,[NumeroFactura]
+      ,[IdentificacionCliente]
+      ,[NombreCliente]
+      ,[CodigoArticulo]
+      ,[Articulo]
+      ,[Presentacion]
+      ,[VolumenVenta]
+      ,[ValorUnitario]
+      ,[ValorVenta]
+      ,[Porcentaje]
+      ,[FechaZeta]
+      ,[Fecha]
+      ,[Hora]
+      ,[Placa]
+      ,[Kilometraje]
+      ,[Credito]
+      ,[FormasPago]
+      ,[Rom]
+  FROM [TsRiveraBrava].[dbo].[VentasCombustible] where [FechaZeta] BETWEEN '2021-03-14' AND '2021-03-15'
+
+GO
