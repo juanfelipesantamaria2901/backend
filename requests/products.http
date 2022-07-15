@@ -1,4 +1,4 @@
-@api = http://localhost:3001/api/cartera
+@api = http://localhost:3001/api/update
 
 {{api}}
 
@@ -39,11 +39,10 @@ DELETE {{api}}/10
 {{api}}/count
 
 ### update
-PUT {{api}}/11
+PUT {{api}}/2
 Content-Type: application/json
 
 {
-    "name": "laptop",
-    "description": "some laptop",
-    "quantity": 20
+    "Identificacion" : "Eholding",
+    "Nombre" : 1006108221
 }

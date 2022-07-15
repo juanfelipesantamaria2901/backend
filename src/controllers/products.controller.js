@@ -11,11 +11,69 @@ export const getProducts = async (req, res) => {
   }
 };
 
+export const SumFilter= async (req, res) => {
+  try {
+    const pool = await getConnection();
+    let FechaZeta = req.params.FechaZeta;
+    let FechaZeta4 = req.params.FechaZeta4;
+
+    const result = await pool
+      .request()
+      .input("FechaZeta", sql.Date, +FechaZeta )
+      .input("FechaZeta4", sql.Date,+ FechaZeta4)
+      .query(querys.SumFilter)
+    return res.json(result.recordset[0]);
+  } catch (error) {
+    res.status(500);
+    res.send(error.message);
+  }
+};
+
+export const getVistaPlano = async (req, res) => {
+  try {
+    const pool = await getConnection();
+    const result = await pool.request().query(querys.getVistaPlano);
+    res.json(result.recordset);
+  } catch (error) {
+    res.status(500);
+    res.send(error.message);
+  }
+};
+
 export const getRelacional = async (req, res) => {
   try {
     const pool = await getConnection();
     const result = await pool.request().query(querys.getAllRelacional);
     res.json(result.recordset);
+  } catch (error) {
+    res.status(500);
+    res.send(error.message);
+  }
+};
+
+export const getUpdateGeneral = async (req, res) => {
+  const {TerceroMaster} = req.params;
+  const { 
+    Identificacion,
+    Nombre} = req.body;
+
+  // validating
+  if (Identificacion == null || Nombre == null) {
+    return res.status(400).json({ msg: "Bad Request. Please fill all fields" });
+  }
+
+  try {
+    const pool = await getConnection();
+    await pool
+      .request()
+      .input("TerceroMaster", sql.VarChar, TerceroMaster)
+      .input("Identificacion", sql.Int, + Identificacion)
+      .input("Nombre", sql.VarChar, Nombre)
+      .query(querys.getUpdateGeneral);
+      res.json({
+        Identificacion,
+        Nombre
+      });
   } catch (error) {
     res.status(500);
     res.send(error.message);
@@ -88,7 +146,7 @@ export const createNewProduct = async (req, res) => {
       .input("IdTurno", sql.Int, +IdTurno)
       .input("CodigoIsla", sql.Int, +CodigoIsla)
       .input("Vendedor", sql.VarChar, Vendedor)
-      .input("IdentificacionCliente", sql.Int, IdentificacionCliente)
+      .input("IdentificacionCliente", sql.VarChar, IdentificacionCliente)
       .input("NombreCliente", sql.VarChar, NombreCliente)
       .input("IdDocumento", sql.Int, +IdDocumento)
       .input("Articulo", sql.VarChar, Articulo)
@@ -141,13 +199,13 @@ export const createNewProduct = async (req, res) => {
 };
 
 export const createNewRelacional = async (req, res) => {
-  const { IdentificacionMaster,
+  const {
     TerceroMaster,
     Identificacion,
     Nombre, } = req.body;
 
   // validating
-  if (IdentificacionMaster == null || TerceroMaster == null || Identificacion == null || Nombre == null) {
+  if (TerceroMaster == null || Identificacion == null || Nombre == null) {
     return res.status(400).json({ msg: "Bad Request. Please fill all fields" });
   }
 
@@ -156,14 +214,12 @@ export const createNewRelacional = async (req, res) => {
 
     await pool
       .request()
-      .input("IdentificacionMaster", sql.Int, + IdentificacionMaster)
       .input("TerceroMaster", sql.VarChar, TerceroMaster)
       .input("Identificacion", sql.Int, + Identificacion)
       .input("Nombre", sql.VarChar, Nombre)
       .query(querys.addNewRelacional);
 
     res.json({
-      IdentificacionMaster,
       TerceroMaster,
       Identificacion,
       Nombre,
@@ -180,8 +236,28 @@ export const getProductById = async (req, res) => {
 
     const result = await pool
       .request()
-      .input("IdTurno", req.params.id)
+      .input("IdDocumento", sql.Int, + req.params.IdDocumento)
+      .input("IdSede", sql.Int, + req.params.IdSede)
       .query(querys.getProducById);
+      console.log(result.recordset[0]);
+    return res.json(result.recordset[0]);
+  } catch (error) {
+    res.status(500);
+    res.send(error.message);
+  }
+};
+
+export const getFiltro = async (req, res) => {
+  try {
+    const pool = await getConnection();
+    let FechaZeta = req.params.FechaZeta;
+    let FechaZeta4 = req.params.FechaZeta4;
+
+    const result = await pool
+      .request()
+      .input("FechaZeta", sql.Date, +FechaZeta )
+      .input("FechaZeta4", sql.Date,+ FechaZeta4)
+      .query(querys.getFilter);
     return res.json(result.recordset[0]);
   } catch (error) {
     res.status(500);
@@ -207,6 +283,27 @@ export const deleteProductById = async (req, res) => {
   }
 };
 
+export const deleteRelacional = async (req, res) => {
+const {TerceroMaster} = req.params
+
+  try {
+    const pool = await getConnection();
+
+    const result = await pool
+      .request()
+      .input("TerceroMaster", sql.VarChar, TerceroMaster)
+      .query(querys.deleteRelacional);
+
+    if (result.rowsAffected[0] === 0) return res.sendStatus(404);
+
+    return res.sendStatus(204);
+  } catch (error) {
+    res.status(500);
+    res.send(error.message);
+  }
+};
+
+
 export const getTotalProducts = async (req, res) => {
   const pool = await getConnection();
 
@@ -215,24 +312,91 @@ export const getTotalProducts = async (req, res) => {
   res.json(result.recordset[0][""]);
 };
 
+
+
+
 export const updateProductById = async (req, res) => {
-  const { description, name, quantity } = req.body;
+const {IdSede, IdDocumento} = req.params;
+  const { 
+    IdTurno,
+    CodigoIsla,
+    Vendedor,
+    IdentificacionCliente,
+    NombreCliente,
+    Articulo,
+    VolumenVenta,
+    ValorUnitario,
+    ValorVenta,
+    Placa,
+    FormasPago,
+    CodigoCara,
+    CodigoManguera,
+    PrefijoFactura,
+    NumeroFactura,
+    FechaZeta,
+    Fecha,
+    Hora,
+    Rom,
+    Kilometraje,
+    Cuenta } = req.body;
 
   // validating
-  if (description == null || name == null || quantity == null) {
+  if ( IdTurno == null || CodigoIsla == null || Vendedor == null || IdentificacionCliente == null || NombreCliente == null ||  Articulo == null || VolumenVenta == null || ValorUnitario == null || ValorVenta == null || Placa == null || FormasPago == null || CodigoCara == null || CodigoManguera == null || PrefijoFactura == null || NumeroFactura == null || FechaZeta == null || Fecha == null || Hora ==null || Rom == null || Kilometraje == null || Cuenta == null) {
     return res.status(400).json({ msg: "Bad Request. Please fill all fields" });
   }
+
 
   try {
     const pool = await getConnection();
     await pool
       .request()
-      .input("name", sql.VarChar, name)
-      .input("description", sql.Text, description)
-      .input("quantity", sql.Int, quantity)
-      .input("id", req.params.id)
+      .input("IdSede", sql.Int, +IdSede)
+      .input("IdTurno", sql.Int, +IdTurno)
+      .input("CodigoIsla", sql.Int, +CodigoIsla)
+      .input("IdDocumento", sql.Int, +IdDocumento)
+      .input("Vendedor", sql.VarChar, Vendedor)
+      .input("IdentificacionCliente", sql.VarChar, IdentificacionCliente)
+      .input("NombreCliente", sql.VarChar, NombreCliente)
+      .input("Articulo", sql.VarChar, Articulo)
+      .input("VolumenVenta", sql.Int, VolumenVenta)
+      .input("ValorUnitario", sql.Int, ValorUnitario)
+      .input("ValorVenta", sql.Int, ValorVenta)
+      .input("Placa", sql.VarChar, Placa)
+      .input("FormasPago", sql.VarChar, FormasPago)
+      .input("CodigoCara", sql.Int, CodigoCara)
+      .input("CodigoManguera", sql.Int, CodigoManguera)
+      .input("PrefijoFactura", sql.VarChar, PrefijoFactura)
+      .input("NumeroFactura", sql.Int, NumeroFactura)
+      .input("FechaZeta", sql.Date, FechaZeta)
+      .input("Fecha", sql.Date, Fecha)
+      .input('Hora', sql.VarChar, Hora)
+      .input("Rom", sql.VarChar, Rom)
+      .input("Kilometraje", sql.VarChar, Kilometraje)
+      .input("Cuenta", sql.VarChar, Cuenta)
       .query(querys.updateProductById);
-    res.json({ name, description, quantity });
+      res.json({
+        IdTurno,
+        CodigoIsla,
+        Vendedor,
+        IdentificacionCliente,
+        NombreCliente,
+        Articulo,
+        VolumenVenta,
+        ValorUnitario,
+        ValorVenta,
+        Placa,
+        FormasPago,
+        CodigoCara,
+        CodigoManguera,
+        PrefijoFactura,
+        NumeroFactura,
+        FechaZeta,
+        Fecha,
+        Hora,
+        Rom,
+        Kilometraje,
+        Cuenta
+      });
   } catch (error) {
     res.status(500);
     res.send(error.message);
