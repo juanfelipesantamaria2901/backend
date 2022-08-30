@@ -156,3 +156,11 @@ SELECT [NumRegistro]
 
 GO
 
+
+ALTER TABLE [TsRiveraBravaTest].[dbo].[VentasCombustible] ADD [Confirmacion] bit 
+GO
+
+UPDATE [TsRiveraBravaTest].[dbo].[VentasCombustible] SET [Confirmacion] = 0 
+GO
+
+EXEC sp_help '[TsRiveraBravaTest].[dbo].[VentasCombustible]'

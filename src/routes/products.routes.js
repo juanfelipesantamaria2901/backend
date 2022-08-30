@@ -14,7 +14,9 @@ import {
   SumFilter,
   getVistaPlano,
   getUpdateGeneral,
-  deleteRelacional
+  deleteRelacional,
+  getRelacionalById,
+  getUpdateRelacion,
 } from "../controllers/products.controller";
 
 const router = Router();
@@ -33,12 +35,15 @@ router.get("login",getLogin)
 router.post("/cartera", createNewProduct);
 router.post("/relacional", createNewRelacional);
 
+
 router.get("/products/count", getTotalProducts);
 
 router.get("/products/:IdDocumento&:IdSede", getProductById);
+router.get("/rel/:TerceroMaster", getRelacionalById);
 
 router.delete("/cartera/:IdDocumento&:IdSede", deleteProductById);
 
 router.put("/products/:IdDocumento&:IdSede", updateProductById);
+router.put("/relacional/:TerceroMaster", getUpdateRelacion);
 
 export default router;

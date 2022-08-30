@@ -80,6 +80,35 @@ export const getUpdateGeneral = async (req, res) => {
   }
 };
 
+export const getUpdateRelacion = async (req, res) => {
+  const {TerceroMaster2} = req.params;
+  const { 
+    IdentificacionCliente,
+    NombreCliente} = req.body;
+
+  // validating
+  if (Identificacion == null || Nombre == null) {
+    return res.status(400).json({ msg: "Bad Request. Please fill all fields" });
+  }
+
+  try {
+    const pool = await getConnection();
+    await pool
+      .request()
+      .input("TerceroMaster2", sql.VarChar, TerceroMaster2)
+      .input("IdentificacionCliente", sql.VarChar, + IdentificacionCliente)
+      .input("NombreCliente", sql.VarChar, NombreCliente)
+      .query(querys.Relacionar);
+      res.json({
+        Identificacion,
+        Nombre
+      });
+  } catch (error) {
+    res.status(500);
+    res.send(error.message);
+  }
+};
+
 export const getSum = async (req, res) => {
   try {
     const pool = await getConnection();
@@ -239,6 +268,22 @@ export const getProductById = async (req, res) => {
       .input("IdDocumento", sql.Int, + req.params.IdDocumento)
       .input("IdSede", sql.Int, + req.params.IdSede)
       .query(querys.getProducById);
+      console.log(result.recordset[0]);
+    return res.json(result.recordset[0]);
+  } catch (error) {
+    res.status(500);
+    res.send(error.message);
+  }
+};
+
+export const getRelacionalById = async (req, res) => {
+  try {
+    const pool = await getConnection();
+
+    const result = await pool
+      .request()
+      .input("TerceroMaster", sql.VarChar, + req.params.TerceroMaster)
+      .query(querys.getRelacional);
       console.log(result.recordset[0]);
     return res.json(result.recordset[0]);
   } catch (error) {
