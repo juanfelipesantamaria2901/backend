@@ -44,6 +44,6 @@ router.get("/rel/:TerceroMaster", getRelacionalById);
 router.delete("/cartera/:IdDocumento&:IdSede", deleteProductById);
 
 router.put("/products/:IdDocumento&:IdSede", updateProductById);
-router.put("/relacional/:TerceroMaster", getUpdateRelacion);
+router.get("/rel", getUpdateRelacion);
 
 export default router;

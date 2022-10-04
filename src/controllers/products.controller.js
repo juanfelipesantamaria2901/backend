@@ -80,29 +80,12 @@ export const getUpdateGeneral = async (req, res) => {
   }
 };
 
+
 export const getUpdateRelacion = async (req, res) => {
-  const {TerceroMaster2} = req.params;
-  const { 
-    IdentificacionCliente,
-    NombreCliente} = req.body;
-
-  // validating
-  if (Identificacion == null || Nombre == null) {
-    return res.status(400).json({ msg: "Bad Request. Please fill all fields" });
-  }
-
   try {
     const pool = await getConnection();
-    await pool
-      .request()
-      .input("TerceroMaster2", sql.VarChar, TerceroMaster2)
-      .input("IdentificacionCliente", sql.VarChar, + IdentificacionCliente)
-      .input("NombreCliente", sql.VarChar, NombreCliente)
-      .query(querys.Relacionar);
-      res.json({
-        Identificacion,
-        Nombre
-      });
+    const result = await pool.request().query(querys.Relacionar);
+    res.json(result.recordset);
   } catch (error) {
     res.status(500);
     res.send(error.message);

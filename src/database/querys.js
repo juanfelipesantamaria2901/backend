@@ -18,7 +18,7 @@ getVistaPlano: "SELECT [IdSede],[IdentificacionCliente],[NombreCliente],[Articul
 getUpdateGeneral: "UPDATE[TsRiveraBravaTest].[dbo].[Tabla_Relacional] set [Identificacion] = @Identificacion, [Nombre]= @Nombre Where [TerceroMaster] = @TerceroMaster ",
 getUpdateGeneral2: "UPDATE [TsRiveraBravaTest].[dbo].[VentasCombustible] SET [IdentificacionCliente] = @Identificacion ,[NombreCliente] =  @Nombre  Where [TerceroMaster] = @TerceroMaster",
 getRelacional: "SELECT * FROM [TsRiveraBravaTest].[dbo].[Tabla_Relacional] Where [TerceroMaster] = @TerceroMaster",
-Relacionar : "UPDATE[TsRiveraBravaTest].[dbo].[VentasCombustible] SET [IdentificacionCliente] = @IdentificacionCliente,[NombreCliente] = @NombreCliente WHERE [Credito]  = 1 AND [CuentaMaster] = @TerceroMaster2",
+Relacionar :"Update [TsRiveraBravaTest].[dbo].[VentasCombustible] set [Confirmacion] = '1' ,[IdentificacionCliente] = t2.Identificacion, [NombreCliente] = t2.Nombre from [TsRiveraBravaTest].[dbo].[VentasCombustible] t1, [TsRiveraBravaTest].[dbo].[Tabla_Relacional] t2 where t1.[CuentaMaster] = t2.[TerceroMaster] and [Confirmacion] = '0'",
 getConfirmacion:"UPDATE [TsRiveraBravaTest].[dbo].[VentasCombustible] SET [Confirmacion] = @Confirmacion WHERE [Credito]  = 1 ",
 
   };
